@@ -3,7 +3,7 @@ import express from 'express'
 
 const app = express()
 app.use(express.json())
-const users = []
+let users = []
 
 app.get("/" , (req ,res) =>{
     res.send(new Date().toString())
@@ -24,9 +24,19 @@ res.send("Something went Wrong")
 app.get("/user" , (req,res)=>{
   res.send(users)
 })
-
-
-
+app.delete("/user/:id" , (req ,res)=>{
+  const {id} = req.params
+  
+  users = users.filter(obj=>  obj.id !== id )
+    
+  res.send({message : "User Deleted Successfully !"})
+})
+app.put("/user/:id" , (req , res)=>{
+ const {id} = req.params
+ const index = users.findIndex(obj =>obj.id === id)
+ users.splice(index ,1 ,{...req.body , id})
+ res.send({message : "User Updated Successfully"})
+})
 
 
 
